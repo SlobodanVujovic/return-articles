@@ -58,6 +58,18 @@ jobs:
           app-name: 'return-articles'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: returnModule.zip
+
+      - name: Unzip artifact for deployment
+        run: unzip returnModule.zip
+
+      - name: Copy prisma folder
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./prisma
+          remote: /prisma
+          host: "20.120.109.87"
+          username: "azureuser"
+          privateKey: ${{ secrets.KEY }}
       
       - name: Executing remote SSH commands using password
         uses: appleboy/ssh-action@v0.1.7
@@ -66,4 +78,4 @@ jobs:
           username: "azureuser"
           key: ${{ secrets.KEY }}
           port: 22
-          script: npx prisma migrate deploy
+          script: sudo apt update && sudo apt-get install -y npm && npx prisma migrate deploy
