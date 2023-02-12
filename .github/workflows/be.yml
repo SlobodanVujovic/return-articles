@@ -74,7 +74,7 @@ jobs:
         run: az webapp create-remote-connection --subscription "Azure subscription 1" --resource-group "MsDirect" -n "return-articles" 2> sshConfig.txt
 
       - name: Save SSH port to SSH_PORT environment variable
-        run: export SSH_PORT=$(cat sshConfig.txt | grep -o -P 'port: \d+' | grep -o -P '\d+')
+        run: export SSH_PORT=$(cat sshConfig.txt | grep -o -P 'port. \d+' | grep -o -P '\d+')
 
       - name: Executing remote SSH commands using password
         uses: appleboy/ssh-action@v0.1.7
