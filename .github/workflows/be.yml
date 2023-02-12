@@ -59,23 +59,28 @@ jobs:
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: returnModule.zip
 
-      - name: Unzip artifact for deployment
-        run: unzip returnModule.zip
+      - name: Delete zip file
+        run: rm returnModule.zip
 
-      - name: Copy prisma folder
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: ./prisma
-          remote: /prisma
-          host: "20.120.109.87"
-          username: "azureuser"
-          privateKey: ${{ secrets.KEY }}
-      
+  migrate:
+    runs-on: ubuntu-latest
+    needs: deploy
+
+    steps:
+      - name: Install Azure CLI
+        run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - name: Open SSH connection on App Service
+        run: az webapp create-remote-connection --subscription "Azure subscription 1" --resource-group "MsDirect" -n "return-articles" 2> sshConfig.txt
+
+      - name: Save SSH port to SSH_PORT environment variable
+        run: export SSH_PORT=$(cat sshConfig.txt | grep -o -P 'port: \d+' | grep -o -P '\d+')
+
       - name: Executing remote SSH commands using password
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: "20.120.109.87"
-          username: "azureuser"
-          key: ${{ secrets.KEY }}
-          port: 22
-          script: sudo apt update && sudo apt-get install -y npm && npx prisma migrate deploy
+          host: "127.0.0.1"
+          username: "root"
+          key: "Docker!"
+          port: "${SSH_PORT}"
+          script: export DATABASE_URL=${{ secrets.TEST_DATABASE_URL }} && cd /home/site/wwwroot/ && npx prisma migrate deploy
