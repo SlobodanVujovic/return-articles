@@ -54,7 +54,7 @@ jobs:
           name: returnArticle
 
       - name: Set DATABASE_URL environment variable
-        run: export DATABASE_URL=$DATABASE_URL
+        run: export DATABASE_URL=$DATABASE_URL && echo "${DATABASE_URL}"
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
