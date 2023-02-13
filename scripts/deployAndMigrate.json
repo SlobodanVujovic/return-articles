@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "return-articles-be",
+      "script": "./dist/main.js"
+    },
+    {
+      "name": "migrate-db",
+      "script": "./scripts/migratePostgre.sh"
+    }
+  ]
+}

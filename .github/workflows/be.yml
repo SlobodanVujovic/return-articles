@@ -61,26 +61,3 @@ jobs:
 
       - name: Delete zip file
         run: rm returnModule.zip
-
-  migrate:
-    runs-on: ubuntu-latest
-    needs: deploy
-
-    steps:
-      - name: Install Azure CLI
-        run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
-      - name: Open SSH connection on App Service
-        run: az webapp create-remote-connection --subscription "Azure subscription 1" --resource-group "MsDirect" -n "return-articles" 2> sshConfig.txt
-
-      - name: Save SSH port to SSH_PORT environment variable
-        run: export SSH_PORT=$(cat sshConfig.txt | grep -o -P 'port. \d+' | grep -o -P '\d+')
-
-      - name: Executing remote SSH commands using password
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: "127.0.0.1"
-          username: "root"
-          key: "Docker!"
-          port: "${SSH_PORT}"
-          script: export DATABASE_URL=${{ secrets.TEST_DATABASE_URL }} && cd /home/site/wwwroot/ && npx prisma migrate deploy
