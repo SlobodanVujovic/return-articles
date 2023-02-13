@@ -1,4 +1,6 @@
 #!/bin/sh
+cd ../node_modules/.bin/
+
 basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 echo "OVO je BASEDIR: ${basedir}"
 
@@ -9,4 +11,4 @@ else
 fi
 
 npx prisma migrate deploy
-# node node_modules\\prisma\\build\\index.js migrate deploy
+# node ./node_modules/prisma/build/index.js migrate deploy

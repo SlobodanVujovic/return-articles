@@ -37,7 +37,13 @@ model User {
 }
 
 model Address {
-  id            Int @id @default(autoincrement())
+  id            Int    @id @default(autoincrement())
+  street        String
+  addressNumber Int
+}
+
+model Address_2 {
+  id            Int    @id @default(autoincrement())
   street        String
   addressNumber Int
 }

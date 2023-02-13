@@ -44,12 +44,16 @@ jobs:
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: returnArticle
+
+      - name: Set DATABASE_URL environment variable
+      - run: export DATABASE_URL=$DATABASE_URL
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
