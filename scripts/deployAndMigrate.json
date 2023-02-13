@@ -6,7 +6,8 @@
     },
     {
       "name": "migrate-db",
-      "script": "./scripts/migratePostgre.sh"
+      "script": "./scripts/migratePostgre.sh",
+      "autorestart" : false
     }
   ]
 }

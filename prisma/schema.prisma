@@ -53,3 +53,9 @@ model Address_3 {
   street        String
   addressNumber Int
 }
+
+model Address_4 {
+  id            Int    @id @default(autoincrement())
+  street        String
+  addressNumber Int
+}
