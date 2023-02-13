@@ -32,7 +32,7 @@ jobs:
           npm run test --if-present
       
       - name: Set .env file
-        run: echo 'DATABASE_URL=${{DATABASE_URL}}' > ./.env
+        run: echo 'DATABASE_URL=${{ env.DATABASE_URL }}' > ./.env
 
       - name: Zip all files for upload
         run: zip -r --symlinks returnModule.zip ./* ./node_modules/.bin .env
